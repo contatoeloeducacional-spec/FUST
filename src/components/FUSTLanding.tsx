@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { Mail, GraduationCap, Globe, Monitor, ArrowRight, BookOpen, Sparkles, Facebook, Instagram, Linkedin, Youtube } from 'lucide-react';
 
 const FUSTLogo = ({ size = 24, className = "", is3D = false, vibrant = false }) => (
@@ -25,19 +25,10 @@ const FUSTLanding = () => {
   const [showLetter, setShowLetter] = useState(false);
   const [isOpening, setIsOpening] = useState(false);
   const { scrollY } = useScroll();
-  
-  const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
-  const smoothScrollY = useSpring(scrollY, springConfig);
 
-  const backgroundY = useTransform(smoothScrollY, [0, 500], [0, 150]);
-  const backgroundScale = useTransform(smoothScrollY, [0, 500], [1.1, 1.2]);
-  const backgroundBlur = useTransform(smoothScrollY, [0, 500], ["blur(0px)", "blur(8px)"]);
-  
-  const particlesY = useTransform(smoothScrollY, [0, 500], [0, -120]);
-  const particlesOpacity = useTransform(smoothScrollY, [0, 500], [0.4, 0.1]);
-  
-  const contentY = useTransform(smoothScrollY, [0, 500], [0, 60]);
-  const contentOpacity = useTransform(smoothScrollY, [0, 300], [1, 0]);
+  const backgroundY = useTransform(scrollY, [0, 500], [0, 150]);
+  const particlesY = useTransform(scrollY, [0, 500], [0, -100]);
+  const contentY = useTransform(scrollY, [0, 500], [0, 50]);
 
   const handleOpenLetter = () => {
     setIsOpening(true);
@@ -63,19 +54,14 @@ const FUSTLanding = () => {
               <motion.div 
                 style={{ 
                   backgroundImage: 'url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1920&q=80")',
-                  y: backgroundY,
-                  scale: backgroundScale,
-                  filter: backgroundBlur
+                  y: backgroundY 
                 }}
-                className="absolute inset-0 bg-cover bg-center opacity-30 grayscale mix-blend-overlay"
+                className="absolute inset-0 bg-cover bg-center opacity-30 grayscale mix-blend-overlay scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-b from-fust-blue/80 via-fust-blue/40 to-fust-blue" />
               <motion.div 
-                style={{ 
-                  y: particlesY,
-                  opacity: particlesOpacity
-                }}
-                className="absolute inset-0 digital-particles" 
+                style={{ y: particlesY }}
+                className="absolute inset-0 digital-particles opacity-40" 
               />
             </div>
 
@@ -96,10 +82,7 @@ const FUSTLanding = () => {
 
             {/* Hero Content */}
             <motion.div 
-              style={{ 
-                y: contentY,
-                opacity: contentOpacity
-              }}
+              style={{ y: contentY }}
               className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 text-center"
             >
               <motion.div
@@ -254,17 +237,11 @@ const FUSTLanding = () => {
             </div>
 
             <div className="max-w-7xl mx-auto relative z-10">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="text-center mb-20"
-              >
+              <div className="text-center mb-20">
                 <h2 className="font-cinzel text-fust-gold tracking-[0.3em] uppercase mb-4">Excelência Global</h2>
                 <h3 className="font-playfair text-4xl md:text-6xl font-bold">Tradição que Transforma</h3>
                 <div className="w-24 h-1 bg-fust-crimson mx-auto mt-6" />
-              </motion.div>
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {[
@@ -274,10 +251,6 @@ const FUSTLanding = () => {
                 ].map((item, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.7, delay: i * 0.2 }}
                     whileHover={{ y: -10 }}
                     className="p-10 bg-white/5 border border-white/10 rounded-[2rem] backdrop-blur-sm hover:border-fust-crimson/50 transition-all group"
                   >
@@ -302,22 +275,30 @@ const FUSTLanding = () => {
               </h2>
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
                 <motion.a
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ 
+                    scale: 1.05, 
+                    backgroundColor: '#8b1416',
+                    boxShadow: "0 15px 35px rgba(123, 17, 19, 0.5)"
+                  }}
                   whileTap={{ scale: 0.98 }}
                   href="https://fustuniversity.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-10 py-5 bg-fust-crimson text-white font-montserrat font-bold uppercase tracking-widest rounded-full transition-all duration-500 border border-fust-gold/30 no-underline inline-block shadow-lg hover:shadow-fust-crimson/40 hover:bg-[#8b1416]"
+                  className="px-10 py-5 bg-fust-crimson text-white font-montserrat font-bold uppercase tracking-widest rounded-full transition-all duration-500 border border-fust-gold/30 no-underline inline-block shadow-lg"
                 >
                   Conhecer Programas
                 </motion.a>
                 <motion.a
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ 
+                    scale: 1.05, 
+                    backgroundColor: 'rgba(201, 165, 76, 0.15)',
+                    boxShadow: "0 10px 30px rgba(201, 165, 76, 0.25)"
+                  }}
                   whileTap={{ scale: 0.98 }}
                   href="https://educacional.usecerbrum.net/inicio.aspx#alunos"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-10 py-5 border-2 border-fust-gold text-fust-gold font-montserrat font-bold uppercase tracking-widest rounded-full transition-all duration-500 no-underline inline-block hover:bg-fust-gold/10 hover:shadow-lg hover:shadow-fust-gold/20"
+                  className="px-10 py-5 border-2 border-fust-gold text-fust-gold font-montserrat font-bold uppercase tracking-widest rounded-full transition-all duration-500 no-underline inline-block"
                 >
                   Acessar Portal do Aluno
                 </motion.a>
