@@ -41,47 +41,6 @@ const FUSTLanding = () => {
   return (
     <div className="min-h-screen bg-fust-blue overflow-x-hidden">
       <AnimatePresence mode="wait">
-        {isOpening && (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-fust-blue flex flex-col items-center justify-center"
-          >
-            <div className="relative">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                className="w-32 h-32 border-4 border-fust-gold/20 border-t-fust-gold rounded-full"
-              />
-              <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="absolute inset-0 flex items-center justify-center"
-              >
-                <FUSTLogo size={60} vibrant />
-              </motion.div>
-            </div>
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-8 text-fust-gold font-cinzel tracking-[0.5em] text-sm uppercase"
-            >
-              Inicializando Sistema...
-            </motion.div>
-            <div className="mt-4 w-48 h-1 bg-white/10 rounded-full overflow-hidden">
-              <motion.div
-                initial={{ x: "-100%" }}
-                animate={{ x: "100%" }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="w-full h-full bg-fust-gold shadow-[0_0_10px_#C9A54C]"
-              />
-            </div>
-          </motion.div>
-        )}
-
         {!showLetter ? (
           <motion.div
             key="hero"
@@ -198,14 +157,68 @@ const FUSTLanding = () => {
             key="letter-page"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="relative min-h-screen library-overlay flex items-center justify-center py-20"
+            className="relative min-h-screen library-overlay flex items-center justify-center"
           >
             {/* Ambient Light Effects */}
             <div className="absolute inset-0 bg-gradient-to-tr from-fust-crimson/40 via-transparent to-fust-gold/20 pointer-events-none" />
             <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/dust.png')] opacity-30 pointer-events-none" />
             
-            <WelcomeLetter onBack={() => setShowLetter(false)} />
+            <WelcomeLetter onContinue={() => setShowLetter(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Transition Overlay */}
+      <AnimatePresence>
+        {isOpening && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-fust-crimson/95 backdrop-blur-md flex items-center justify-center"
+          >
+            <div className="relative w-80 h-56 perspective-1000">
+              {/* Envelope Animation */}
+              <motion.div
+                initial={{ rotateX: 0, y: 100, opacity: 0 }}
+                animate={{ rotateX: 0, y: 0, opacity: 1 }}
+                transition={{ duration: 0.8 }}
+                className="relative w-full h-full bg-fust-crimson rounded-lg shadow-2xl border-2 border-fust-gold/30 flex items-center justify-center overflow-hidden"
+              >
+                {/* Wax Seal */}
+                <motion.div
+                  initial={{ scale: 0, rotate: -45 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: 1, type: "spring" }}
+                  className="absolute z-20 w-16 h-16 bg-fust-crimson rounded-full shadow-lg flex items-center justify-center border-2 border-fust-gold"
+                >
+                  <div className="text-fust-gold flex items-center justify-center">
+                    <FUSTLogo size={50} vibrant is3D />
+                  </div>
+                </motion.div>
+
+                {/* Cracks/Breaking Animation */}
+                <motion.div
+                  animate={{ scale: [1, 1.2, 0], opacity: [1, 1, 0] }}
+                  transition={{ delay: 1.8, duration: 0.5 }}
+                  className="absolute z-30 inset-0 flex items-center justify-center"
+                >
+                  <div className="w-20 h-20 bg-fust-gold/30 rounded-full blur-xl" />
+                </motion.div>
+
+                {/* Envelope Flap */}
+                <motion.div
+                  animate={{ rotateX: -180 }}
+                  transition={{ delay: 2, duration: 0.5 }}
+                  className="absolute top-0 left-0 w-full h-1/2 bg-[#8b1416] origin-top z-10 rounded-t-lg border-b border-fust-gold/10"
+                />
+                
+                <div className="absolute inset-0 flex items-center justify-center">
+                   <div className="w-full h-[2px] bg-fust-gold/10 absolute top-1/2" />
+                   <div className="h-full w-[2px] bg-fust-gold/10 absolute left-1/2" />
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -348,147 +361,87 @@ const FUSTLanding = () => {
   );
 };
 
-const WelcomeLetter = ({ onBack }: { onBack: () => void }) => {
+const WelcomeLetter = ({ onContinue }: { onContinue: () => void }) => {
   return (
-    <div className="w-full max-w-5xl mx-auto p-4 md:p-8 z-10">
-      <motion.button
-        onClick={onBack}
-        whileHover={{ x: -5, color: '#C9A54C' }}
-        className="mb-8 flex items-center gap-2 text-white/60 font-montserrat text-xs uppercase tracking-widest transition-colors"
-      >
-        <ArrowRight size={16} className="rotate-180" />
-        Voltar ao Início
-      </motion.button>
-      
+    <div className="w-full max-w-4xl mx-auto p-6 md:p-12 z-10">
       <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="glass-card holographic-border p-8 md:p-16 rounded-3xl relative overflow-hidden"
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="parchment-texture p-8 md:p-16 shadow-[0_30px_100px_rgba(0,0,0,0.6)] border-2 border-fust-crimson/40 relative overflow-hidden sepia-[0.15]"
+        style={{ 
+          borderRadius: '2px 4px 2px 8px / 4px 2px 6px 2px',
+          clipPath: 'polygon(0% 2%, 2% 0%, 50% 1%, 98% 0%, 100% 2%, 99% 50%, 100% 98%, 98% 100%, 50% 99%, 2% 100%, 0% 98%, 1% 50%)'
+        }}
       >
-        {/* Futuristic Scanline Effect */}
-        <div className="scanline" />
-
-        {/* Animated Background Elements */}
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-          <div className="absolute top-10 left-10 w-64 h-64 bg-fust-gold/10 rounded-full blur-[100px] animate-pulse" />
-          <div className="absolute bottom-10 right-10 w-96 h-96 bg-fust-crimson/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full digital-particles opacity-20" />
+        {/* Aged Paper Stains */}
+        <div className="absolute top-[10%] left-[5%] w-32 h-32 bg-[#8b4513]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-[15%] right-[10%] w-48 h-48 bg-[#8b4513]/10 rounded-full blur-3xl pointer-events-none" />
+        
+        {/* Lion Watermark */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-[0.08] pointer-events-none select-none mix-blend-multiply invert brightness-0">
+          <FUSTLogo size={600} />
         </div>
 
-        {/* Decorative Tech Corners */}
-        <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-fust-gold/40 rounded-tl-3xl" />
-        <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-fust-gold/40 rounded-tr-3xl" />
-        <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-fust-gold/40 rounded-bl-3xl" />
-        <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-fust-gold/40 rounded-br-3xl" />
+        {/* Decorative Borders */}
+        <div className="absolute top-4 left-4 right-4 bottom-4 border border-fust-crimson/20 pointer-events-none" />
+        <div className="absolute top-6 left-6 right-6 bottom-6 border border-fust-crimson/10 pointer-events-none" />
 
-        <header className="text-center mb-16 relative">
-          <motion.div
-            animate={{ 
-              rotateY: [0, 360],
-              filter: ["brightness(1)", "brightness(1.5)", "brightness(1)"]
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-            className="w-40 h-40 border border-fust-gold/30 rounded-full flex items-center justify-center mx-auto mb-8 bg-white/5 backdrop-blur-xl shadow-[0_0_50px_rgba(201,165,76,0.2)] relative group"
-          >
-            <FUSTLogo size={120} vibrant is3D className="group-hover:scale-110 transition-transform duration-700" />
-            <div className="absolute inset-0 rounded-full border-2 border-dashed border-fust-gold/20 animate-[spin_20s_linear_infinite]" />
-          </motion.div>
-          <motion.h1 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="font-cinzel text-4xl md:text-5xl font-bold text-white tracking-[0.2em] mb-4 uppercase glow-text"
-          >
-            Mensagem de Boas-Vindas
-          </motion.h1>
-          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-fust-gold to-transparent mx-auto opacity-50" />
+        <header className="text-center mb-12 relative">
+          <div className="w-32 h-32 border-2 border-fust-crimson rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_20px_45px_rgba(0,0,0,0.3)] bg-white/60 backdrop-blur-md animate-pulse-gold relative overflow-hidden group">
+            <FUSTLogo size={100} vibrant is3D className="group-hover:scale-110 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-fust-gold/30 to-transparent opacity-40" />
+          </div>
+          <h1 className="font-cinzel text-3xl md:text-4xl font-bold text-fust-black tracking-tight mb-2 uppercase">Carta de Boas-Vindas</h1>
+          <div className="w-24 h-[2px] bg-gradient-to-r from-transparent via-fust-crimson to-transparent mx-auto" />
         </header>
 
-        <div className="font-montserrat text-lg md:text-xl text-white/80 leading-relaxed space-y-10 text-left relative z-10">
-          <motion.p 
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="font-playfair italic text-fust-gold text-3xl md:text-4xl mb-12 glow-text"
-          >
-            Caro(a) estudante,
-          </motion.p>
+        <div className="font-crimson text-lg md:text-xl text-[#2c1810] leading-[1.8] space-y-8 text-left relative z-10 tracking-wide">
+          <p className="font-cormorant font-bold italic text-[#6a1012] text-2xl md:text-3xl mb-10">Caro(a) estudante,</p>
           
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="space-y-8"
-          >
-            <p className="border-l-4 border-fust-crimson pl-6 py-2 bg-white/5 rounded-r-xl">
-              É com imensa honra e alegria que celebramos sua chegada à <span className="text-fust-gold font-bold">Florida University of Science and Theology</span>.
-            </p>
-            
-            <p>
-              Hoje, você inicia uma jornada que transcende o convencional. Na FUST, acreditamos que o futuro é construído na intersecção entre a <span className="text-fust-gold italic">ciência rigorosa</span> e a <span className="text-fust-gold italic">fé profunda</span>.
-            </p>
-            
-            <p>
-              Você agora faz parte de um ecossistema global de inovação e sabedoria, onde cada descoberta científica é um passo em direção ao entendimento maior da criação, e cada reflexão teológica é uma luz para o progresso humano.
-            </p>
-            
-            <p className="bg-fust-gold/5 p-6 rounded-2xl border border-fust-gold/10 italic">
-              "Nosso compromisso é formar não apenas profissionais de excelência, mas líderes íntegros, capazes de harmonizar tecnologia e espiritualidade para o bem comum."
-            </p>
-            
-            <p>
-              Prepare-se para ser desafiado, inspirado e transformado. Este é o seu momento de brilhar e deixar sua marca na história.
-            </p>
-          </motion.div>
+          <p className="indent-8">É com grande alegria que damos as boas-vindas a você na <span className="font-bold text-[#6a1012] font-cormorant">Florida University of Science and Theology</span>.</p>
           
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 1.2 }}
-            className="pt-12 text-center"
-          >
-            <p className="font-playfair font-bold italic text-fust-gold text-3xl md:text-4xl glow-text">
-              Seja o futuro. Seja FUST.
-            </p>
-          </motion.div>
+          <p className="indent-8">Hoje marca o início de uma nova jornada em sua vida acadêmica e pessoal. Ao ingressar na FUST, você passa a fazer parte de uma comunidade internacional dedicada ao conhecimento, à reflexão e à transformação do mundo por meio da educação.</p>
+          
+          <p className="indent-8">Nossa universidade nasceu com um propósito claro: unir ciência, fé e sabedoria para formar líderes preparados para enfrentar os desafios da sociedade moderna.</p>
+          
+          <p className="indent-8">Aqui, você encontrará mais do que cursos e disciplinas. Encontrará um ambiente de crescimento, diálogo e descoberta, onde cada estudante é encorajado a desenvolver seu potencial intelectual, espiritual e humano.</p>
+          
+          <p className="indent-8">Esperamos que esta jornada seja marcada por aprendizado profundo, novas amizades e conquistas significativas.</p>
+          
+          <p className="indent-8">Que este seja apenas o primeiro capítulo de uma história extraordinária.</p>
+          
+          <div className="pt-12 text-center">
+            <p className="font-cormorant font-bold italic text-[#6a1012] text-2xl md:text-3xl">Seja muito bem-vindo(a) à FUST.</p>
+          </div>
         </div>
 
-        <footer className="mt-20 pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-10 relative z-10">
+        <footer className="mt-16 pt-8 border-t-2 border-fust-crimson/10 flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
           <div className="text-center md:text-left">
-            <p className="font-cinzel font-bold text-sm uppercase tracking-[0.3em] text-fust-gold mb-1">Diretoria Executiva</p>
-            <p className="font-montserrat text-xs text-white/40 tracking-widest">FLORIDA UNIVERSITY OF SCIENCE AND THEOLOGY</p>
+            <p className="font-cinzel font-bold text-sm uppercase tracking-widest text-fust-black">Diretoria Acadêmica</p>
+            <p className="font-cormorant italic text-fust-black/60">Florida University of Science and Theology</p>
           </div>
           
           <motion.a
-            whileHover={{ 
-              scale: 1.05, 
-              boxShadow: "0 0 40px rgba(201, 165, 76, 0.4)",
-              backgroundColor: "#C9A54C",
-              color: "#0F1E3A"
-            }}
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(15, 30, 58, 0.3)" }}
             whileTap={{ scale: 0.95 }}
             href="https://wa.me/5583999751577?text=Quero%20fazer%20parte%20da%20FUST"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-4 px-12 py-6 bg-transparent border-2 border-fust-gold text-fust-gold font-montserrat font-bold uppercase tracking-[0.2em] rounded-full transition-all duration-500 group no-underline"
+            className="flex items-center gap-3 px-10 py-5 bg-fust-blue text-white font-montserrat font-bold uppercase tracking-widest rounded-sm hover:bg-fust-black transition-colors group shadow-2xl no-underline border border-fust-gold/20"
           >
-            Iniciar Jornada
-            <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+            Iniciar Minha Jornada
+            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </motion.a>
         </footer>
 
-        {/* Holographic Seal */}
-        <div className="absolute bottom-10 right-10 opacity-30 pointer-events-none group">
-          <motion.div 
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="w-32 h-32 border-2 border-dashed border-fust-gold rounded-full flex items-center justify-center"
-          >
-            <div className="text-fust-gold font-cinzel font-bold text-center text-[10px] tracking-tighter">
-              AUTHENTICATED<br/>SYSTEM 2026<br/>FUST GLOBAL
+        {/* Official Stamp */}
+        <div className="absolute bottom-8 right-8 opacity-20 pointer-events-none rotate-12 mix-blend-multiply">
+          <div className="w-32 h-32 border-4 border-[#6a1012] rounded-full flex items-center justify-center">
+            <div className="text-[#6a1012] font-cinzel font-bold text-center text-xs">
+              OFFICIAL SEAL<br/>FUST 2026
             </div>
-          </motion.div>
+          </div>
         </div>
       </motion.div>
     </div>
